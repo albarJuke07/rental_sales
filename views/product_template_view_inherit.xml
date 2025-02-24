@@ -1,0 +1,7 @@
+<odoo>
+  <data>
+    <record model="ir.actions.act_window" id="rental_sales_product_action">
+      <field name="res_model">product.template</field>
+    </record>
+  </data>
+</odoo>
