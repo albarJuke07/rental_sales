@@ -12,7 +12,7 @@
                 <field name="count_rent" widget="statinfo" nolabel="1" class="oe_inline"/>
                 <field name="uom_name" class="oe_inline"/>
               </span>
-              <span class="o_stat_text">In Rental test</span>
+              <span class="o_stat_text">In Rental</span>
             </div>
           </button>
         </xpath>
