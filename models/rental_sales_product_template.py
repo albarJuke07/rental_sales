@@ -9,7 +9,8 @@ class RentalSalesProductTemplate(models.Model):
     @api.depends('is_rent')
     def _compute_unit_rented(self):
       for rec in self:
-        rec.count_rent = 0
+        counter_is_rent = self.env['product.template'].search_count([('is_rent', '=', True)])
+        rec.count_rent = counter_is_rent
         
     def action_rental_products(self):
       return {
