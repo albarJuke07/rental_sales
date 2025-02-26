@@ -18,7 +18,7 @@ Long description of module's purpose
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'product'],
+    'depends': ['base', 'product', 'sale_management'],
 
     # always loaded
     'data': [
@@ -26,6 +26,7 @@ Long description of module's purpose
         'security/res_group.xml',
         'security/ir.model.access.csv',
         'views/product_template_view_inherit.xml',
+        'views/sale_order_view_inherit.xml',
         'views/rental_sales_menu.xml',
     ],
     # only loaded in demonstration mode
