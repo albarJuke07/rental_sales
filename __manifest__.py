@@ -34,5 +34,10 @@ Long description of module's purpose
         'demo/demo.xml',
     ],
     'installable': True,
+    'assets': {
+        'web.assets_backend': [
+            'rental_sales/static/src/scss/custom_style.scss',
+        ],
+    },
 }
 

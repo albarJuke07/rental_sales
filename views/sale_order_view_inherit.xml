@@ -3,6 +3,8 @@
     <record model="ir.actions.act_window" id="rental_sales_order_action">
       <field name="name">Rental Orders</field>
       <field name="res_model">sale.order</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{'default_rental_active': True, 'in_order_rent': True}</field>
     </record>
     <record id="sale_order_form_view_inherit_rentalsales" model='ir.ui.view'>
       <field name="name">sale.order.form.view.inherit</field>
@@ -12,14 +14,28 @@
         <xpath expr="//field[@name='product_template_id']" position="attributes">
           <attribute name="domain">[('is_rent', '=', True)]</attribute>
         </xpath>
+        <xpath expr="//button[@name='action_cancel']" position="after">
+          <field name="rental_status" invisible="1"/>
+          <button string="Reserve" type='object' name="rentalsales__reserved_order_action" class='rental-sales__reserved-btn' invisible="not (state == 'sale' and rental_status == 'draft')"/>
+        </xpath>
+        <xpath expr="//button[@id='create_invoice']" position="after">
+          <button string="Return" type='object' name="rentalsales__returned_order_action" class='btn-primary' invisible="rental_status != 'reserved'"/>
+        </xpath>
         <xpath expr="//field[@name='payment_term_id']" position="after">
           <label for="rental_start_date" string="Rental Period"/>
           <div class="o_row">
-            <field name="rental_start_date" />
+            <field name="rental_start_date" placeholder="Start Date" options="{'min_date': 'today'}"/>
             <i class='fa fa-arrow-right' style="color: blue"></i>
-            <field name="rental_return_date" />
+            <field name="rental_return_date" placeholder="Return Date" options="{'min_date': 'today'}" />
           </div>
-          <field name="duration_days" string="Duration" />
+          <field name="rental_active" invisible="1"/>
+          <label for="duration_days" string="Duration" invisible="not context.get('in_order_rent', False)"/>
+          <div class='d-flex' invisible="not context.get('in_order_rent', False)">
+            <div class='col-3'>
+              <field name="duration_days"/>
+            </div>
+            <span class='col-9 testing-css'>Days</span>
+          </div>
         </xpath>
       </field>
     </record>

@@ -1,0 +1,13 @@
+$color: green;
+
+.testing-css {
+  color: $color;
+}
+.rental-sales__reserved-btn {
+  background-color: #016d8f;
+  color: white;
+  &:hover {
+    background-color: #016d8f;
+    color: white;
+  }
+}

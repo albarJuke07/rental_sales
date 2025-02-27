@@ -13,12 +13,12 @@ class RentalSalesProductTemplate(models.Model):
         rec.count_rent = counter_is_rent
         
     def action_rental_products(self):
+      print(self.id)
       return {
-          "name": _("Rental Product"),
+          "name": _("Rental Sale Order"),
           "type": "ir.actions.act_window",
           "view_mode": "tree,form",
-          "res_model": "product.template",
+          "res_model": "sale.order",
           "target": "current",
-          "domain": [("is_rent", "=", True)],
-          "context": {"default_is_rent": self.id}
+          "domain": [("order_line.product_template_id.is_rent", "=", True), ("order_line.product_template_id.id", "=", self.id)],
       }
