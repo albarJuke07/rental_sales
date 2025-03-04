@@ -4,7 +4,8 @@
       <field name="name">Rental Orders</field>
       <field name="res_model">sale.order</field>
       <field name="view_mode">tree,form</field>
-      <field name="context">{'default_rental_active': True, 'in_order_rent': True, 'selected_product_id': False}</field>
+      <field name="context">{'default_is_rental_order': True,'default_rental_active': True, 'in_order_rent': True, 'selected_product_id': False}</field>
+      <field name="domain">[("is_rental_order", "=", True)]</field>
     </record>
     <record id="sale_order_form_view_inherit_rentalsales" model='ir.ui.view'>
       <field name="name">sale.order.form.view.inherit</field>
