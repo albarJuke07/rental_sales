@@ -26,13 +26,13 @@ class RentalSalesProductTemplate(models.Model):
         rec.duration_days = (rec.rental_return_date - rec.rental_start_date).days if rec.rental_return_date and rec.rental_start_date and (
             rec.rental_return_date > rec.rental_start_date) else 0
     
-    @api.model_create_multi
-    def create(self, vals_list):
-        for vals in vals_list:
-          if self.env.context.get('in_order_rent'):
-            if vals.get('is_rental_order', True):
-              vals['is_rental_order'] = True
-        return super().create(vals_list)
+    # @api.model_create_multi
+    # def create(self, vals_list):
+    #     for vals in vals_list:
+    #       if self.env.context.get('in_order_rent'):
+    #         if vals.get('is_rental_order', True):
+    #           vals['is_rental_order'] = True
+    #     return super().create(vals_list)
 
     def action_confirm(self):
       result = super().action_confirm()
