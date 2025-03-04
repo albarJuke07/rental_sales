@@ -6,7 +6,7 @@ import datetime
 class RentalSalesProductTemplate(models.Model):
     _inherit = 'sale.order'
 
-    is_rental_order = fields.Boolean(default=True)
+    is_rental_order = fields.Boolean()
     # rental_start_date = fields.Date(copy=False, default=fields.Date.today)
     # rental_return_date = fields.Date(copy=False, default=lambda self: datetime.datetime.now() + datetime.timedelta(days=1))
     rental_start_date = fields.Date(copy=False)
@@ -17,7 +17,7 @@ class RentalSalesProductTemplate(models.Model):
       ('reserved', 'Reserve'),
       ('returned', 'Return'),
       ('cancelled', 'Cancel'),
-    ], default='draft')
+    ], default='draft', readonly=True)
     rental_active = fields.Boolean(store=False)
 
     @api.depends('rental_start_date', 'rental_return_date')
@@ -25,6 +25,14 @@ class RentalSalesProductTemplate(models.Model):
       for rec in self:
         rec.duration_days = (rec.rental_return_date - rec.rental_start_date).days if rec.rental_return_date and rec.rental_start_date and (
             rec.rental_return_date > rec.rental_start_date) else 0
+    
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+          if self.env.context.get('in_order_rent'):
+            if vals.get('is_rental_order', True):
+              vals['is_rental_order'] = True
+        return super().create(vals_list)
 
     def action_confirm(self):
       result = super().action_confirm()

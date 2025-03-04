@@ -4,7 +4,7 @@
       <field name="name">Rental Orders</field>
       <field name="res_model">sale.order</field>
       <field name="view_mode">tree,form</field>
-      <field name="context">{'default_rental_active': True, 'in_order_rent': True}</field>
+      <field name="context">{'default_rental_active': True, 'in_order_rent': True, 'selected_product_id': False}</field>
     </record>
     <record id="sale_order_form_view_inherit_rentalsales" model='ir.ui.view'>
       <field name="name">sale.order.form.view.inherit</field>
@@ -12,7 +12,12 @@
       <field name="inherit_id" ref="sale.view_order_form"/>
       <field name="arch" type="xml">
         <xpath expr="//field[@name='product_template_id']" position="attributes">
-          <attribute name="domain">[('is_rent', '=', True)]</attribute>
+          <attribute name="domain">
+            [ 
+              ('is_rent', '=', context.get('in_order_rent', False)), 
+              ('id', '=?', context.get('selected_product_id'))
+            ]
+          </attribute>
         </xpath>
         <xpath expr="//button[@name='action_cancel']" position="after">
           <field name="rental_status" invisible="1"/>
@@ -22,8 +27,9 @@
           <button string="Return" type='object' name="rentalsales__returned_order_action" class='btn-primary' invisible="rental_status != 'reserved'"/>
         </xpath>
         <xpath expr="//field[@name='payment_term_id']" position="after">
-          <label for="rental_start_date" string="Rental Period"/>
-          <div class="o_row">
+          <field name="rental_status" invisible="not context.get('in_order_rent', False)"></field>
+          <label for="rental_start_date" string="Rental Period" invisible="not context.get('in_order_rent', False)"/>
+          <div class="o_row" invisible="not context.get('in_order_rent', False)">
             <field name="rental_start_date" placeholder="Start Date" options="{'min_date': 'today'}"/>
             <i class='fa fa-arrow-right' style="color: blue"></i>
             <field name="rental_return_date" placeholder="Return Date" options="{'min_date': 'today'}" />
@@ -46,6 +52,7 @@
       <field name="arch" type="xml">
         <xpath expr="//search" position="inside">
           <filter string="Have Rented Products" name="filter_rental" domain="[('order_line.product_template_id.is_rent', '=', True)]"/>
+          <filter string="Reserved" name="filter_rental_reserved" domain="[('rental_status', '=', 'reserved')]"/>
         </xpath>
       </field>
     </record>
